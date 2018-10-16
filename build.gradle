@@ -1,0 +1,78 @@
+buildscript {
+  ext {
+    wildflySwarmVersion = '2018.5.0'
+  }
+
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+
+  dependencies {
+    classpath "org.wildfly.swarm:wildfly-swarm-gradle-plugin:$wildflySwarmVersion"
+  }
+}
+
+plugins {
+  id 'war'
+  id 'java'
+  id 'io.franzbecker.gradle-lombok' version '1.14'
+  id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+}
+
+version = '1.0.0-SNAPSHOT'
+group = 'com.github.daggerok'
+
+war {
+  archiveName 'wildfly-swarm-microservice'
+}
+
+apply plugin: 'wildfly-swarm'
+
+version = '0.0.0'
+group = 'daggerok'
+
+repositories {
+  mavenCentral()
+  jcenter()
+  maven { url 'http://repository.jboss.org/nexus/content/groups/public/' }
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.wildfly.swarm:bom:$wildflySwarmVersion"
+    mavenBom "org.wildfly.swarm:bom-all:$wildflySwarmVersion"
+  }
+}
+
+lombok {
+  version = '1.18.2'
+}
+
+dependencies {
+  compileOnly 'javax:javaee-api:7.0'
+  implementation 'org.wildfly.swarm:jaxrs'
+  implementation 'org.wildfly.swarm:cdi'
+  implementation 'org.wildfly.swarm:ee'
+
+  implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6'
+  implementation 'io.vavr:vavr:0.9.2'
+  implementation 'org.slf4j:slf4j-api:1.7.25'
+  implementation 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+swarm {
+  properties {
+    swarm.http.port = 8080
+  }
+
+  executable = true
+  bundleDependencies = true
+}
+
+wrapper {
+  gradleVersion = '4.10.2'
+  distributionType = 'BIN'
+}
+
+defaultTasks 'wildfly-swarm-package'

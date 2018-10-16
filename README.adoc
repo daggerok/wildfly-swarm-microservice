@@ -1,0 +1,31 @@
+= wildfly-swarm-microservice image:https://travis-ci.org/daggerok/wildfly-swarm-microservice.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/wildfly-swarm-microservice"]
+
+TODO: Implement some in addition....
+
+- redis event store
+
+.build, run and test
+[source,bash]
+----
+./mvnw >/dev/null
+./target/*-swarm.jar &
+wait_for 8080
+http :8080/api/v1/message message=ololo
+http :8080/api/v1/message message=trololo
+http :8080/api/v1/message
+stop_any 8080
+
+./gradlew >/dev/null
+./build/libs/*-swarm.jar &
+wait_for 8080
+http :8080/api/v1/message message=trololo
+http :8080/api/v1/message message=ololo
+http :8080/api/v1/message
+stop_any 8080
+----
+
+links:
+
+- link:https://www.youtube.com/watch?v=5BvJVAlZyvo[YouTube: WildFly Swarm in 15 minutes by Antonio Goncalves]
+- link:https://www.youtube.com/watch?v=yXmkSEpgSf4[YouTube: Developing, deploying and scaling a wildfly swarm microservice on Openshift]
+- link:https://www.youtube.com/watch?v=5MhqcVFVJ2s[YouTube: Developing Web Applications with WildFly 8]
