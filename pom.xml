@@ -25,6 +25,8 @@
         </executions>
         <configuration>
           <executable>true</executable>
+          <!-- TODO -->
+          <!--<mainClass>daggerok.Main</mainClass>-->
         </configuration>
       </plugin>
     </plugins>
@@ -38,11 +40,79 @@
     </dependency>
     <dependency>
       <groupId>org.wildfly.swarm</groupId>
+      <artifactId>jaxrs-jsonp</artifactId>
+    </dependency>
+    <!--
+    include jaxrs:
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
       <artifactId>jaxrs</artifactId>
+    </dependency>
+    include logging:
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>logging</artifactId>
+    </dependency>
+    JSON-P API
+    <dependency>
+      <groupId>javax.json</groupId>
+      <artifactId>javax.json-api</artifactId>
+    </dependency>
+    JSON-P RI
+    <dependency>
+      <groupId>org.glassfish</groupId>
+      <artifactId>javax.json</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    JSON-B API
+    <dependency>
+      <groupId>javax.json.bind</groupId>
+      <artifactId>javax.json.bind-api</artifactId>
+    </dependency>
+    Yasson (JSON-B RI)
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>yasson</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    -->
+    <dependency><!-- include logging -->
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>cdi</artifactId>
+    </dependency>
+
+    <dependency><!-- include datasources (which is include logging) -->
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>org.wildfly.swarm</groupId>
-      <artifactId>cdi</artifactId>
+      <artifactId>flyway</artifactId>
+    </dependency>
+    <!-- included datasources:
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>datasources</artifactId>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.197</version>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>4.2.18.Final</version>
+      <scope>provided</scope>
+    </dependency>
+    -->
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>arquillian</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -73,6 +143,11 @@
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.wildfly.swarm</groupId>
+      <artifactId>ejb</artifactId>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -84,6 +159,13 @@
       </dependency>
       <dependency>
         <groupId>org.wildfly.swarm</groupId>
+        <artifactId>bom</artifactId>
+        <version>${version.wildfly-swarm}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly.swarm</groupId>
         <artifactId>bom-all</artifactId>
         <version>${version.wildfly-swarm}</version>
         <type>pom</type>
@@ -91,6 +173,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <properties>
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -98,4 +181,27 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.wildfly-swarm>2018.5.0</version.wildfly-swarm>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>openshift</id>
+      <build>
+        <plugins>
+          <plugin><!-- ./mvnw fabric8:deploy -->
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>3.5.41</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

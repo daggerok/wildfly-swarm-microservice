@@ -10,18 +10,19 @@ TODO: Implement some in addition....
 ./mvnw >/dev/null
 ./target/*-swarm.jar &
 wait_for 8080
-http :8080/api/v1/message message=ololo
-http :8080/api/v1/message message=trololo
-http :8080/api/v1/message
+http :8080/api/v1/messages message=ololo
+http :8080/api/v1/messages message=trololo
+http :8080/api/v1/messages
 stop_any 8080
 
-./gradlew >/dev/null
-./build/libs/*-swarm.jar &
-wait_for 8080
-http :8080/api/v1/message message=trololo
-http :8080/api/v1/message message=ololo
-http :8080/api/v1/message
-stop_any 8080
+## DO NOT USE GRADLE. NOT STABLE YET!
+#./gradlew >/dev/null
+#./build/libs/*-swarm.jar &
+#wait_for 8080
+#http :8080/api/v1/messages message=trololo
+#http :8080/api/v1/messages message=ololo
+#http :8080/api/v1/messages
+#stop_any 8080
 ----
 
 links:
@@ -29,3 +30,6 @@ links:
 - link:https://www.youtube.com/watch?v=5BvJVAlZyvo[YouTube: WildFly Swarm in 15 minutes by Antonio Goncalves]
 - link:https://www.youtube.com/watch?v=yXmkSEpgSf4[YouTube: Developing, deploying and scaling a wildfly swarm microservice on Openshift]
 - link:https://www.youtube.com/watch?v=5MhqcVFVJ2s[YouTube: Developing Web Applications with WildFly 8]
+- link:https://www.slideshare.net/comsysto/writing-java-ee-microservices-using-wildfly-swarm[Writing Java EE microservices using WildFly Swarm]
+- link:https://issues.jboss.org/browse/THORN-2074?jql=labels%20%3D%20getting-started[Helpful WildFly getting-started JIRAs]
+- link:https://github.com/emag-wildfly-swarm-sandbox/example-jpa-jaxrs-cdi-flyway[GitHub: emag-wildfly-swarm-sandbox/example-jpa-jaxrs-cdi-flyway]

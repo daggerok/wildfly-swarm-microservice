@@ -50,15 +50,22 @@ lombok {
 }
 
 dependencies {
+  runtime 'javax:javaee-api:7.0'
   compileOnly 'javax:javaee-api:7.0'
-  implementation 'org.wildfly.swarm:jaxrs'
+
+  implementation 'org.wildfly.swarm:jaxrs-jsonp'
   implementation 'org.wildfly.swarm:cdi'
-  implementation 'org.wildfly.swarm:ee'
+  implementation 'org.wildfly.swarm:ejb'
+  implementation 'org.wildfly.swarm:jpa'
+  implementation 'org.wildfly.swarm:flyway'
+  implementation 'com.h2database:h2:1.4.197'
 
   implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6'
   implementation 'io.vavr:vavr:0.9.2'
   implementation 'org.slf4j:slf4j-api:1.7.25'
   implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+  testImplementation 'org.wildfly.swarm:arquillian'
 }
 
 swarm {
@@ -66,7 +73,7 @@ swarm {
     swarm.http.port = 8080
   }
 
-  executable = true
+  //executable = true
   bundleDependencies = true
 }
 

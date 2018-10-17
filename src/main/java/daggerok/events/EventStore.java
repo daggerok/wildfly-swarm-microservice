@@ -1,34 +1,53 @@
 package daggerok.events;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Asynchronous;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static javax.ejb.ConcurrencyManagementType.BEAN;
+
+@Startup
+@Singleton
 @ApplicationScoped
+@ConcurrencyManagement(BEAN)
 public class EventStore {
 
-  private Map<UUID, List<DomainEvent>> events;
+  @Inject
+  Event<DomainEvent> domainEvents;
+
+  Map<UUID, List<DomainEvent>> store;
 
   @PostConstruct
   public void init() {
-    events = new ConcurrentHashMap<>();
+    store = new ConcurrentHashMap<>();
   }
 
   public Map<UUID, List<DomainEvent>> findAll() {
-    return Collections.unmodifiableMap(events);
+    return Collections.unmodifiableMap(store);
   }
 
-  public List<DomainEvent> findByUuid(final UUID uuid) {
-    return events.getOrDefault(uuid, new ArrayList<>());
+  public List<DomainEvent> findByAggregateId(final UUID aggregateId) {
+    return store.getOrDefault(aggregateId, new ArrayList<>());
   }
 
-  public void add(final UUID uuid, final DomainEvent event) {
-    events.putIfAbsent(uuid, new ArrayList<>());
-    events.computeIfPresent(uuid, (key, values) ->
-        Stream.concat(values.stream(), Stream.of(event))
+  @Asynchronous
+  @Transactional
+  public void store(final DomainEvent event) {
+    final UUID aggregateId = event.getAggregateId();
+    store.putIfAbsent(aggregateId, new ArrayList<>());
+    store.computeIfPresent(aggregateId, (id, events) ->
+        Stream.concat(events.stream(), Stream.of(event))
               .collect(Collectors.toList()));
+    domainEvents.fire(event);
   }
 }

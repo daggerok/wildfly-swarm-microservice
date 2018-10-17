@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PACKAGE;
 
 @Getter
 @AllArgsConstructor(access = PACKAGE)
-public class MessageCreated implements DomainEvent {
+public class MessageAdded implements DomainEvent {
 
   @Getter
   final UUID aggregateId;
@@ -25,7 +25,7 @@ public class MessageCreated implements DomainEvent {
   //@JsonDeserialize(using = LocalDateTimeDeserializer.class)
   ZonedDateTime createdAt;
 
-  public static MessageCreated of(final UUID uuid, final String message) {
-    return new MessageCreated(uuid, message, now());
+  public static MessageAdded of(final UUID uuid, final String message) {
+    return new MessageAdded(uuid, message, now());
   }
 }
