@@ -16,35 +16,31 @@ import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Slf4j
-@Path("")
 @Stateless
+@Path("/api/v1/")
 @Produces(APPLICATION_JSON)
 public class MessageQueryResource {
 
-  @Inject
-  EventStore eventStore;
-
-  @Inject
-  MessageStatisticsQueryProjection statistics;
+  @Inject EventStore eventStore;
+  @Inject MessageStatisticsQueryProjection statistics;
 
   @GET
-  @Path("/api/v1/messages")
+  @Path("/messages")
   public Response getAll() {
     return Response.ok(eventStore.findAll()).build();
   }
 
   @GET
-  @Path("/api/v1/messages/{id}")
+  @Path("/messages/{id}")
   public Response get(@PathParam("id") final UUID id) {
     return Response.ok(eventStore.findByAggregateId(id)).build();
   }
 
   @GET
-  @Path("/api/v1/statistics")
+  @Path("/statistics")
   public Response getStatistics() {
     final JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
 

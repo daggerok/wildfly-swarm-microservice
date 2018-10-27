@@ -25,6 +25,12 @@ stop_any 8080
 #stop_any 8080
 ----
 
+.debug
+[source,bash]
+----
+./gradlew ; java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 build/libs/*-swarm.jar
+----
+
 links:
 
 - link:https://www.youtube.com/watch?v=5BvJVAlZyvo[YouTube: WildFly Swarm in 15 minutes by Antonio Goncalves]

@@ -16,17 +16,16 @@ import java.util.UUID;
 import static java.util.Collections.singletonMap;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-@Path("")
 @Stateless
+@Path("/api/v1")
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 public class MessageCommandResource {
 
-  @Inject
-  Event<Command> commandGateway;
+  @Inject Event<Command> commandGateway;
 
   @POST
-  @Path("/api/v1/messages")
+  @Path("/messages")
   public Response post(final Map<String, String> payload) {
 
     final String message = Optional.ofNullable(payload.get("message"))
@@ -38,7 +37,7 @@ public class MessageCommandResource {
   }
 
   @PUT
-  @Path("/api/v1/messages/{id}")
+  @Path("/messages/{id}")
   public Response put(@PathParam("id") final UUID id, final Map<String, String> payload) {
 
     final String message = Optional.ofNullable(payload.get("message"))

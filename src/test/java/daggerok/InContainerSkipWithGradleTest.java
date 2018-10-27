@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 
 @DefaultDeployment(type = DefaultDeployment.Type.WAR)
 @RunWith(Arquillian.class)
-public class InContainerTest {
+public class InContainerSkipWithGradleTest {
 
   @ArquillianResource
   InitialContext context;
